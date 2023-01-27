@@ -7,6 +7,8 @@ import re
 from bs4 import BeautifulSoup
 
 from pdfminer.high_level import extract_text  
+
+print('しばらく　お待ちください.......')
 #pdfファイル名の取得
 res_org=requests.get(r'https://www.pref.mie.lg.jp/YAKUMUS/HP/m0068000066_00079.htm')
 soup=BeautifulSoup(res_org.text,'html.parser')
