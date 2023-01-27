@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from pdfminer.high_level import extract_text  
 #pdfファイル名の取得
-res_org=requests.get(r'https://www.pref.mie.lg.jp/YAKUMUS/HP/m0068000066_00077.htm')
+res_org=requests.get(r'https://www.pref.mie.lg.jp/YAKUMUS/HP/m0068000066_00079.htm')
 soup=BeautifulSoup(res_org.text,'html.parser')
 
 tag_span=soup.find('span',class_='attach-pdf')
@@ -63,29 +63,45 @@ print(r)
 
 
 text1=text.replace('\n',',')
-text2=text1.split('　・患者様')[0]
-text3=re.sub('※ 報道機関・県民の皆さまへ,','',text2)
 
+text2=text1.split('２　発生件数（四日市市及び三重県発表分 ）')[1]
 
-ml1=re.search(r'市町.*',text3)
+text3=re.sub('※ 報道機関・県民の皆さまへ,.*','',text2)
+
+ml1=re.search(r'件数.*市町',text3)
 rl1=ml1.group()
+list1=rl1.split(',')
+list1.remove('市町')
 
 
-list2=rl1[:].split(',')
+ml2=re.search(r'市町.*',text3)
+rl2=ml2.group()
 
+
+list2=rl2[:].split(',')
+
+
+for c,co in zip(list2,list1):
+    print(c,co)
+  
+'''
 df_1=pd.DataFrame(list2)
 df_1.columns=['col1']
 
-df_2=df_1.set_index('col1')
-df_city=df_2.loc['市町':'件数',:]
-df_city.reset_index(inplace=True) 
-df_city2=df_city[:-1]
-df_city3=df_city2[:-1]
-df_data=df_2.loc['件数':,:]
-df_data.reset_index(inplace=True)
-df_data.columns=['count']
-df_data2=df_data[:-1]
-df_data3=df_data2[:-1]
+print(df_1)
+
+
+
+#df_2=df_1.set_index('col1')
+#df_city=df_2.loc['市町':'件数',:]
+#df_city.reset_index(inplace=True) 
+#df_city2=df_city[:-1]
+#df_city3=df_city2[:-1]
+#df_data=df_2.loc['件数':,:]
+#df_data.reset_index(inplace=True)
+#df_data.columns=['count']
+#df_data2=df_data[:-1]
+#df_data3=df_data2[:-1]
 
 df=pd.concat([df_city3,df_data3],axis=1)
 
@@ -107,4 +123,13 @@ df_new=df.rename(columns={'col1':'市町','count':'件数'})
 df_new.drop(index=0,inplace=True)
 
 print(df_new)
+
+
+'''
+cn=[j for i,j in zip(list2,list1) if i=='名張市']
+print(f'名張市の件数　{cn}件')
+
+ci=[j for i,j in zip(list2,list1) if i=='伊賀市']
+print(f'伊賀市の件数　{ci}件')
+
 input('何かキーを入力して終了してください')
