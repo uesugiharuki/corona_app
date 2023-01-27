@@ -63,13 +63,15 @@ print(r)
 
 
 text1=text.replace('\n',',')
+text2=text1.split('　・患者様')[0]
+text3=re.sub('※ 報道機関・県民の皆さまへ,','',text2)
 
 
-ml1=re.search(r'市町.*報道機関',text1)
+ml1=re.search(r'市町.*',text3)
 rl1=ml1.group()
 
 
-list2=rl1[:-10].split(',')
+list2=rl1[:].split(',')
 
 df_1=pd.DataFrame(list2)
 df_1.columns=['col1']
@@ -79,14 +81,13 @@ df_city=df_2.loc['市町':'件数',:]
 df_city.reset_index(inplace=True) 
 df_city2=df_city[:-1]
 df_city3=df_city2[:-1]
-
 df_data=df_2.loc['件数':,:]
 df_data.reset_index(inplace=True)
 df_data.columns=['count']
 df_data2=df_data[:-1]
-#df_data3=df_data2[:-1]
+df_data3=df_data2[:-1]
 
-df=pd.concat([df_city3,df_data2],axis=1)
+df=pd.concat([df_city3,df_data3],axis=1)
 
 print()
 df_nabari=df[df['col1']=='名張市']
