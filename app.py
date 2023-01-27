@@ -1,13 +1,14 @@
 
 
-from email import header
-from operator import index
+
 
 import requests
 import re
 from bs4 import BeautifulSoup
-import pandas as pd
+
 from pdfminer.high_level import extract_text  
+
+print('しばらく　お待ちください.......')
 #pdfファイル名の取得
 res_org=requests.get(r'https://www.pref.mie.lg.jp/YAKUMUS/HP/m0068000066_00079.htm')
 soup=BeautifulSoup(res_org.text,'html.parser')
@@ -56,9 +57,7 @@ mdate=re.search('令和[\d]+年+[\d]+月+[\d]+日',text)
 rdate=mdate.group()
 print(rdate)
 
-m = re.search('発生件数[\s　][-\d]+件', text)
-r = m.group()  
-print(r) 
+
 
 
 
@@ -84,48 +83,10 @@ list2=rl2[:].split(',')
 for c,co in zip(list2,list1):
     print(c,co)
   
-'''
-df_1=pd.DataFrame(list2)
-df_1.columns=['col1']
+mdate=re.search('令和[\d]+年+[\d]+月+[\d]+日',text)
+rdate=mdate.group()
+print(rdate)
 
-print(df_1)
-
-
-
-#df_2=df_1.set_index('col1')
-#df_city=df_2.loc['市町':'件数',:]
-#df_city.reset_index(inplace=True) 
-#df_city2=df_city[:-1]
-#df_city3=df_city2[:-1]
-#df_data=df_2.loc['件数':,:]
-#df_data.reset_index(inplace=True)
-#df_data.columns=['count']
-#df_data2=df_data[:-1]
-#df_data3=df_data2[:-1]
-
-df=pd.concat([df_city3,df_data3],axis=1)
-
-print()
-df_nabari=df[df['col1']=='名張市']
-strn=df_nabari.iloc[0,1]
-print(f'名張市件数　　:{strn}件')
-
-
-df_iga=df[df['col1']=='伊賀市']
-stri=df_iga.iloc[0,1]
-print(f'伊賀市件数　　:{stri}件')
-
-print()
-
-
-
-df_new=df.rename(columns={'col1':'市町','count':'件数'})
-df_new.drop(index=0,inplace=True)
-
-print(df_new)
-
-
-'''
 cn=[j for i,j in zip(list2,list1) if i=='名張市']
 print(f'名張市の件数　{cn}件')
 
